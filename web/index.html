@@ -13,8 +13,11 @@
     <!-- Bootstrap core CSS -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
+
     <link href="dashboard.css" rel="stylesheet">
+
+
+    <link href="bootstrap/css/typeahead.js-bootstrap.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]>
@@ -24,7 +27,13 @@
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+
     <![endif]-->
+
+
+
+
+
 </head>
 
 <body>
@@ -55,30 +64,34 @@
                 <li><a href="https://iecsvrftp:8443/svn/">Subversion Root</a></li>
                 <li><a href="http://192.168.254.226:7109/dbsync/login.view">DB Sync</a></li>
                 <li class="dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    Help <span class="caret"></span>
-                  </a>
-                  <ul class="dropdown-menu">
-                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Subversion Help</a></li>
-                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Help File 2</a></li>
-                       <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Help File 3</a></li>
-                  </ul>
-
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        Help <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Subversion Help</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Help File 2</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Help File 3</a></li>
+                    </ul>
                 </li>
             </ul>
 
-          <!--  <div class="navbar-form navbar-right btn-group">
-                <button type="button" class="btn btn-default">Button 1</button>
-                <button type="button" class="btn btn-default">Button 2</button>
-                <button type="button" class="btn btn-default">Button 3</button>
-            </div>-->
+            <!--  <div class="navbar-form navbar-right btn-group">
+                  <button type="button" class="btn btn-default">Button 1</button>
+                  <button type="button" class="btn btn-default">Button 2</button>
+                  <button type="button" class="btn btn-default">Button 3</button>
+              </div>-->
+
+            <!--<form class="navbar-form">
+                <div class="form-group" style="display:inline;">
+                    <div class="input-group" >
+                    <input id="projects" type="text" class="form-control" placeholder="Searh for projects here">
+                    </div>
+                </div>
+            </form>-->
 
             <form class="navbar-form">
-                <div class="form-group" style="display:inline;">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Searh for projects here">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-                    </div>
+                <div class="form-group navbar-left" style="display:inline;">
+                    <input id="projects" type="text" class="form-control" placeholder="Search for projects here">
                 </div>
             </form>
 
@@ -86,6 +99,7 @@
 
     </div>
 </nav>
+
 
 <!--
 
@@ -169,8 +183,8 @@
                 </div>
             </div>-->
 
-            <div class="table-responsive">
-                <table class="table table-striped">
+            <div id="mainContent" class="table-responsive">
+<!--                <table class="table table-striped">
                     <thead>
                     <tr>
                         <th>Application</th>
@@ -294,7 +308,7 @@
                         <td>libero</td>
                     </tr>
                     </tbody>
-                </table>
+                </table>-->
             </div>
         </div>
     </div>
@@ -306,5 +320,86 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="bootstrap/assets/js/docs.min.js"></script>
+<script src="http://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
+
+<script>
+    var substringMatcher = function (strs) {
+        return function findMatches(q, cb) {
+            var matches, substringRegex;
+
+            // an array that will be populated with substring matches
+            matches = [];
+
+            // regex used to determine if a string contains the substring `q`
+            substrRegex = new RegExp(q, 'i');
+
+            // iterate through the pool of strings and for any string that
+            // contains the substring `q`, add it to the `matches` array
+            $.each(strs, function (i, str) {
+                if (substrRegex.test(str)) {
+                    // the typeahead jQuery plugin expects suggestions to a
+                    // JavaScript object, refer to typeahead docs for more info
+                    matches.push({ value: str });
+                }
+            });
+
+            cb(matches);
+        };
+    };
+
+    function getProjects(){
+
+        /*** add json call here to servlet***/
+
+        return ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
+                'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
+                'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
+                'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
+                'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
+                'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
+                'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
+                'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+                'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+            ];
+
+    }
+
+
+
+    $('#projects').typeahead({
+                hint: true,
+                highlight: true,
+                minLength: 1
+            },
+            {
+                name: 'states',
+                displayKey: 'value',
+                source: substringMatcher(getProjects())
+            });
+
+
+
+    var table   = $('<table class="table table-striped"><thead><tr>'+
+            '<th>Application</th><th>Client</th><th>Status</th>'+
+            '</thead><tbody>');
+
+    var tbody=table.find('tbody');
+
+    var row = $('<tr><td></td><td></td></tr>')
+
+    for (var i=0;i<10;i++){
+        var newRow = row.clone();
+        newRow.find(':eq(0)').append('App '+i);
+        newRow.find(':eq(1)').append('Client '+i);
+        tbody.append(newRow);
+    }
+
+    table.appendTo('#mainContent');
+
+
+
+</script>
+
+
 </body>
 </html>
