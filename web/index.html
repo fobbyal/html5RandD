@@ -29,10 +29,59 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 
     <![endif]-->
+    <style type="text/css">
+        .twitter-typeahead {
+            width: 100%;
+            display: inline;
+        }
 
+        .tt-dropdown-menu {
+            width: 100%;
+            min-width: 160px;
+            margin-top: 2px;
+            padding: 5px 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            *border-right-width: 2px;
+            *border-bottom-width: 2px;
+            -webkit-border-radius: 6px;
+            -moz-border-radius: 6px;
+            border-radius: 6px;
+            -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            -webkit-background-clip: padding-box;
+            -moz-background-clip: padding;
+            background-clip: padding-box;
+        }
 
+        .tt-suggestion {
+            display: block;
+            padding: 3px 20px;
+        }
 
+        .twitter-typeahead .tt-suggestion.tt-cursor {
+            color: #fff;
+            background-color: #0081c2;
+            background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
+            background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
+            background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
+            background-image: -o-linear-gradient(top, #0088cc, #0077b3);
+            background-image: linear-gradient(to bottom, #0088cc, #0077b3);
+            background-repeat: repeat-x;
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0);
+        }
 
+        .tt-suggestion.tt-cursor a {
+            color: #fff;
+        }
+
+        .tt-suggestion p {
+            margin: 0;
+        }
+
+    </style>
 
 </head>
 
@@ -54,10 +103,6 @@
 
         <div class="navbar-collapse collapse" id="navbar-collapsible">
 
-            <!-- <ul class="nav navbar-nav navbar-left">
-               <li><a href="#">Link 1</a></li>
-               <li><a href="#">Link 2</a></li>
-             </ul>-->
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="http://iecsvrapp08/login">YouTrack</a></li>
                 <li><a href="http://192.168.254.226">Team City</a></li>
@@ -74,20 +119,6 @@
                     </ul>
                 </li>
             </ul>
-
-            <!--  <div class="navbar-form navbar-right btn-group">
-                  <button type="button" class="btn btn-default">Button 1</button>
-                  <button type="button" class="btn btn-default">Button 2</button>
-                  <button type="button" class="btn btn-default">Button 3</button>
-              </div>-->
-
-            <!--<form class="navbar-form">
-                <div class="form-group" style="display:inline;">
-                    <div class="input-group" >
-                    <input id="projects" type="text" class="form-control" placeholder="Searh for projects here">
-                    </div>
-                </div>
-            </form>-->
 
             <form class="navbar-form">
                 <div class="form-group navbar-left" style="display:inline;">
@@ -140,7 +171,7 @@
 
             <h4>Client</h4>
             <ul class="nav nav-sidebar">
-                <li class="active"><a href="#">Overview</a></li>
+                <li ><a href="#">Overview</a></li>
                 <li><a href="#">Reports</a></li>
                 <li><a href="#">Analytics</a></li>
                 <li><a href="#">Export</a></li>
@@ -184,131 +215,6 @@
             </div>-->
 
             <div id="mainContent" class="table-responsive">
-<!--                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>Application</th>
-                        <th>Client</th>
-                        <th>Status</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>1,001</td>
-                        <td>Lorem</td>
-                        <td>ipsum</td>
-                        <td>dolor</td>
-                        <td>sit</td>
-                    </tr>
-                    <tr>
-                        <td>1,002</td>
-                        <td>amet</td>
-                        <td>consectetur</td>
-                        <td>adipiscing</td>
-                        <td>elit</td>
-                    </tr>
-                    <tr>
-                        <td>1,003</td>
-                        <td>Integer</td>
-                        <td>nec</td>
-                        <td>odio</td>
-                        <td>Praesent</td>
-                    </tr>
-                    <tr>
-                        <td>1,003</td>
-                        <td>libero</td>
-                        <td>Sed</td>
-                        <td>cursus</td>
-                        <td>ante</td>
-                    </tr>
-                    <tr>
-                        <td>1,004</td>
-                        <td>dapibus</td>
-                        <td>diam</td>
-                        <td>Sed</td>
-                        <td>nisi</td>
-                    </tr>
-                    <tr>
-                        <td>1,005</td>
-                        <td>Nulla</td>
-                        <td>quis</td>
-                        <td>sem</td>
-                        <td>at</td>
-                    </tr>
-                    <tr>
-                        <td>1,006</td>
-                        <td>nibh</td>
-                        <td>elementum</td>
-                        <td>imperdiet</td>
-                        <td>Duis</td>
-                    </tr>
-                    <tr>
-                        <td>1,007</td>
-                        <td>sagittis</td>
-                        <td>ipsum</td>
-                        <td>Praesent</td>
-                        <td>mauris</td>
-                    </tr>
-                    <tr>
-                        <td>1,008</td>
-                        <td>Fusce</td>
-                        <td>nec</td>
-                        <td>tellus</td>
-                        <td>sed</td>
-                    </tr>
-                    <tr>
-                        <td>1,009</td>
-                        <td>augue</td>
-                        <td>semper</td>
-                        <td>porta</td>
-                        <td>Mauris</td>
-                    </tr>
-                    <tr>
-                        <td>1,010</td>
-                        <td>massa</td>
-                        <td>Vestibulum</td>
-                        <td>lacinia</td>
-                        <td>arcu</td>
-                    </tr>
-                    <tr>
-                        <td>1,011</td>
-                        <td>eget</td>
-                        <td>nulla</td>
-                        <td>Class</td>
-                        <td>aptent</td>
-                    </tr>
-                    <tr>
-                        <td>1,012</td>
-                        <td>taciti</td>
-                        <td>sociosqu</td>
-                        <td>ad</td>
-                        <td>litora</td>
-                    </tr>
-                    <tr>
-                        <td>1,013</td>
-                        <td>torquent</td>
-                        <td>per</td>
-                        <td>conubia</td>
-                        <td>nostra</td>
-                    </tr>
-                    <tr>
-                        <td>1,014</td>
-                        <td>per</td>
-                        <td>inceptos</td>
-                        <td>himenaeos</td>
-                        <td>Curabitur</td>
-                    </tr>
-                    <tr>
-                        <td>1,015</td>
-                        <td>sodales</td>
-                        <td>ligula</td>
-                        <td>in</td>
-                        <td>libero</td>
-                    </tr>
-                    </tbody>
-                </table>-->
             </div>
         </div>
     </div>
@@ -347,23 +253,22 @@
         };
     };
 
-    function getProjects(){
+    function getProjects() {
 
         /*** add json call here to servlet***/
 
         return ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
-                'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
-                'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-                'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
-                'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
-                'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-                'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
-                'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-                'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-            ];
+            'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
+            'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
+            'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
+            'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
+            'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
+            'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
+            'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+            'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+        ];
 
     }
-
 
 
     $('#projects').typeahead({
@@ -378,24 +283,22 @@
             });
 
 
-
-    var table   = $('<table class="table table-striped"><thead><tr>'+
-            '<th>Application</th><th>Client</th><th>Status</th>'+
+    var table = $('<table class="table table-striped"><thead><tr>' +
+            '<th>Application</th><th>Client</th><th>Status</th>' +
             '</thead><tbody>');
 
-    var tbody=table.find('tbody');
+    var tbody = table.find('tbody');
 
     var row = $('<tr><td></td><td></td></tr>')
 
-    for (var i=0;i<10;i++){
+    for (var i = 0; i < 10; i++) {
         var newRow = row.clone();
-        newRow.find(':eq(0)').append('App '+i);
-        newRow.find(':eq(1)').append('Client '+i);
+        newRow.find(':eq(0)').append('App ' + i);
+        newRow.find(':eq(1)').append('Client ' + i);
         tbody.append(newRow);
     }
 
     table.appendTo('#mainContent');
-
 
 
 </script>
