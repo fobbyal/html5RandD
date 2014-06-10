@@ -13,13 +13,13 @@ public class IntegAppInfo implements Serializable {
     /**
      * optional tag for AEP REG/UNREG
      */
-    String clientAppVersiont;
+    String clientAppVersion;
 
     String client;
     /**
      * Legacy for 3.0 referring to under the JComplete 3.0 umbrella
      */
-    String mileStone;
+    String milestone;
     /**
      * Choices of DEV STG or TEST or EXT
      */
@@ -28,18 +28,8 @@ public class IntegAppInfo implements Serializable {
     /**
      * Server type JBoss or Weblogic at this point
      * At this point the hope is that we can manipulate the server to start or stop
-     *
      */
     String serverType;
-
-    /**
-     * server status
-     * May be implement some server status logic where we can check on the status of the app
-     */
-
-    String serverStatus;
-
-
 
 
     /**
@@ -52,7 +42,7 @@ public class IntegAppInfo implements Serializable {
     /**
      * url for accessing the app
      */
-    String appLocation;
+    String appURL;
 
     /**
      * uTrack url for tickets creation or other wise
@@ -60,7 +50,7 @@ public class IntegAppInfo implements Serializable {
      * creating tickets or viewing product specific ids
      * need to research and may need to define further information
      */
-    String uTrackLocation;
+    String uTrackURL;
 
 
     /**
@@ -69,19 +59,42 @@ public class IntegAppInfo implements Serializable {
      * features kile initializing builds. need to research and may need to define further inforation
      */
 
-    String teamyCityLocation;
+    String teamCityURL;
 
     /**
-     *
-     */
-    String oracleDB;
-
-
-    /**
-     *  Ftp Deployment tool
+     * Ftp Deployment tool
      */
 
-    String ftpLocation;
+    String ftpReleaseLocation;
+
+
+    String dbConnectionString;
+
+    String versionControlRoot;
+
+    public String getuTrackURL() {
+        return uTrackURL;
+    }
+
+    public void setuTrackURL(String uTrackURL) {
+        this.uTrackURL = uTrackURL;
+    }
+
+    public String getDbConnectionString() {
+        return dbConnectionString;
+    }
+
+    public void setDbConnectionString(String dbConnectionString) {
+        this.dbConnectionString = dbConnectionString;
+    }
+
+    public String getVersionControlRoot() {
+        return versionControlRoot;
+    }
+
+    public void setVersionControlRoot(String versionControlRoot) {
+        this.versionControlRoot = versionControlRoot;
+    }
 
     public String getProductName() {
         return productName;
@@ -89,6 +102,25 @@ public class IntegAppInfo implements Serializable {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    @Override
+    public String toString() {
+        return "IntegAppInfo{" +
+                "productName='" + productName + '\'' +
+                ", clientAppVersion='" + clientAppVersion + '\'' +
+                ", client='" + client + '\'' +
+                ", milestone='" + milestone + '\'' +
+                ", environmentType='" + environmentType + '\'' +
+                ", serverType='" + serverType + '\'' +
+                ", serverConsoleUrl='" + serverConsoleUrl + '\'' +
+                ", appURL='" + appURL + '\'' +
+                ", uTrackURL='" + uTrackURL + '\'' +
+                ", teamCityURL='" + teamCityURL + '\'' +
+                ", ftpReleaseLocation='" + ftpReleaseLocation + '\'' +
+                ", dbConnectionString='" + dbConnectionString + '\'' +
+                ", versionControlRoot='" + versionControlRoot + '\'' +
+                '}';
     }
 
     public String getClient() {
@@ -99,12 +131,12 @@ public class IntegAppInfo implements Serializable {
         this.client = client;
     }
 
-    public String getMileStone() {
-        return mileStone;
+    public String getMilestone() {
+        return milestone;
     }
 
-    public void setMileStone(String mileStone) {
-        this.mileStone = mileStone;
+    public void setMilestone(String milestone) {
+        this.milestone = milestone;
     }
 
     public String getEnvironmentType() {
@@ -123,14 +155,6 @@ public class IntegAppInfo implements Serializable {
         this.serverType = serverType;
     }
 
-    public String getServerStatus() {
-        return serverStatus;
-    }
-
-    public void setServerStatus(String serverStatus) {
-        this.serverStatus = serverStatus;
-    }
-
     public String getServerConsoleUrl() {
         return serverConsoleUrl;
     }
@@ -139,51 +163,55 @@ public class IntegAppInfo implements Serializable {
         this.serverConsoleUrl = serverConsoleUrl;
     }
 
-    public String getAppLocation() {
-        return appLocation;
+    public String getAppURL() {
+        return appURL;
     }
 
-    public void setAppLocation(String appLocation) {
-        this.appLocation = appLocation;
+    public void setAppURL(String appURL) {
+        this.appURL = appURL;
     }
 
-    public String getuTrackLocation() {
-        return uTrackLocation;
+
+    public String getTeamCityURL() {
+        return teamCityURL;
     }
 
-    public void setuTrackLocation(String uTrackLocation) {
-        this.uTrackLocation = uTrackLocation;
+    public void setTeamCityURL(String teamCityURL) {
+        this.teamCityURL = teamCityURL;
     }
 
-    public String getTeamyCityLocation() {
-        return teamyCityLocation;
+
+    public String getFtpReleaseLocation() {
+        return ftpReleaseLocation;
     }
 
-    public void setTeamyCityLocation(String teamyCityLocation) {
-        this.teamyCityLocation = teamyCityLocation;
+    public void setFtpReleaseLocation(String ftpReleaseLocation) {
+        this.ftpReleaseLocation = ftpReleaseLocation;
     }
 
-    public String getOracleDB() {
-        return oracleDB;
+    public String getClientAppVersion() {
+        return clientAppVersion;
     }
 
-    public void setOracleDB(String oracleDB) {
-        this.oracleDB = oracleDB;
+    public void setClientAppVersion(String clientAppVersion) {
+        this.clientAppVersion = clientAppVersion;
     }
 
-    public String getFtpLocation() {
-        return ftpLocation;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof IntegAppInfo)) return false;
+
+        IntegAppInfo that = (IntegAppInfo) o;
+
+        if (!appURL.equals(that.appURL)) return false;
+
+        return true;
     }
 
-    public void setFtpLocation(String ftpLocation) {
-        this.ftpLocation = ftpLocation;
-    }
-
-    public String getClientAppVersiont() {
-        return clientAppVersiont;
-    }
-
-    public void setClientAppVersiont(String clientAppVersiont) {
-        this.clientAppVersiont = clientAppVersiont;
+    @Override
+    public int hashCode() {
+        return appURL.hashCode();
     }
 }

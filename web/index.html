@@ -119,19 +119,19 @@
         <div class="col-sm-3 col-md-2 sidebar">
 
             <h4>Client</h4>
-            <ul class="nav nav-sidebar">
-                <li ><a href="#">Overview</a></li>
+            <ul id="client-nav" class="nav nav-sidebar">
+                <!--<li><a href="#">Overview</a></li>
                 <li><a href="#">Reports</a></li>
                 <li><a href="#">Analytics</a></li>
-                <li><a href="#">Export</a></li>
+                <li><a href="#">Export</a></li>-->
             </ul>
             <h4>Product</h4>
-            <ul class="nav nav-sidebar">
-                <li><a href="">Nav item</a></li>
+            <ul id="product-nav" class="nav nav-sidebar">
+                <!--<li><a href="">Nav item</a></li>
                 <li><a href="">Nav item again</a></li>
                 <li><a href="">One more nav</a></li>
                 <li><a href="">Another nav item</a></li>
-                <li><a href="">More navigation</a></li>
+                <li><a href="">More navigation</a></li>-->
             </ul>
 
         </div>
@@ -178,6 +178,8 @@
 <script src="http://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
 
 <script>
+
+
     var substringMatcher = function (strs) {
         return function findMatches(q, cb) {
             var matches, substringRegex;
@@ -206,54 +208,122 @@
 
         /*** add json call here to servlet***/
 
-        return ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
-            'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
-            'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-            'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
-            'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
-            'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-            'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
-            'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-            'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-        ];
-
+        return appData.tags;
     }
 
 
-    $('#projects').typeahead({
-                hint: true,
-                highlight: true,
-                minLength: 1
-            },
-            {
-                name: 'states',
-                displayKey: 'value',
-                source: substringMatcher(getProjects())
-            }).on("typeahead:selected", function (event, data, dataset) {
-                processSearchBox();
-            });
+    /**
+     * Load Default Data
+     * @type {*|jQuery|HTMLElement}
+     */
 
-    var table = $('<table class="table table-striped"><thead><tr>' +
-            '<th>Application</th><th>Client</th><th>Status</th>' +
-            '</thead><tbody>');
 
-    var tbody = table.find('tbody');
+    var appTable = $('<table id="AppContent" class="table table-striped">' +
+            '<thead><tr>' +
+            '<th>Application</th>' +
+            '<th>Team City</th>' +
+            '<th>You Track</th>' +
+            '<th>DataBase</th>' +
+            '</tr></thead><tbody>');
+    var appTableTbody = appTable.find('tbody');
 
-    var row = $('<tr><td></td><td></td></tr>')
+    var appData;
 
-    for (var i = 0; i < 10; i++) {
-        var newRow = row.clone();
-        newRow.find(':eq(0)').append('App ' + i);
-        newRow.find(':eq(1)').append('Client ' + i);
-        tbody.append(newRow);
+
+    function addTableEntry(entry) {
+        var newRow = '<tr>';
+
+        var tmpString = entry.client + '-' + entry.productName + '-' + entry.milestone + '-' + entry.environmentType;
+        tmpString = '<a href="' + entry.appURL + '">' + tmpString + '</a>';
+        newRow += '<td>' + tmpString + '</td>';
+        tmpString = '<a href="' + entry.teamCityURL + '">Build Page</a>';
+        newRow += '<td>' + tmpString + '</td>';
+        tmpString = '<a href="' + entry.uTrackURL + '">Issuer Tracker</a>';
+        newRow += '<td>' + tmpString + '</td>';
+        newRow += '<td>' + entry.dbConnectionString + '</td>';
+
+        newRow += '</tr>';
+
+
+        appTableTbody.append(newRow);
+
     }
 
-    table.appendTo('#mainContent');
+    function initializeTypeAhead() {
+        $('#projects').typeahead({
+                    hint: true,
+                    highlight: true,
+                    minLength: 1
+                },
+                {
+                    name: 'states',
+                    displayKey: 'value',
+                    source: substringMatcher(getProjects())
+                }).on("typeahead:selected", function (event, data, dataset) {
+                    processSearchBox();
+                });
+    }
 
-    var processSearchBox = function () {
-        alert('Selected value is '+$('#projects').val());
+    function loadData(searchString, searchType, firsttime) {
+
+        var parameters = {};
+
+        if (searchString) {
+            parameters.action = "search";
+            parameters.searchType = searchString;
+            parameters.searchString = searchString;
+        } else {
+            parameters.action = "load_all";
+        }
+
+        $.ajax({type: 'POST',
+            data: parameters,
+            url: 'integapptools.json',
+            success: function (data, textStatus, jqXHR) {
+
+                //var response = jQuery.parseJSON('{ "name": "John" }');
+
+                if (!data.error) {
+                    appData = data.response;
+
+                    $.each(appData.allData, function (index, value) {
+                        addTableEntry(value);
+                    });
+                    appTable.appendTo('#mainContent');
+
+                    if (firsttime) {
+                        initializeTypeAhead();
+                        loadSideBar();
+                    }
+
+                } else {
+                    alert(data.message);
+                }
+
+            }});
 
     }
+
+    function loadSideBar() {
+        $.each(appData.clients, function (index, value) {
+            var sideEntry = '<li><a href="#">' + value + '</a></li>';
+            $('#client-nav').append(sideEntry);
+        });
+        $.each(appData.products, function (index, value) {
+            var sideEntry = '<li><a href="#">' + value + '</a></li>';
+            $('#product-nav').append(sideEntry);
+        });
+    }
+
+
+    function initilizePage() {
+        loadData(null, null, true);
+
+
+    }
+
+    initilizePage();
+
 
 
 </script>

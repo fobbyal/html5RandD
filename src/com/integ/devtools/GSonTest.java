@@ -18,10 +18,33 @@ public class GSonTest {
 
         IntStream.rangeClosed(1, 4).boxed().forEach(v ->{ list.add("Number "+v);});
 
-        System.out.println(gson.toJson(list));
+        Test tt = new Test("abc");
 
+        System.out.println(gson.toJson(tt));
 
+    }
 
+    static  class Test{
 
+        Test() {
+        }
+
+        Test(String abc) {
+            this.abc = abc;
+        }
+
+        String abc;
+
+        public String getAbc() {
+            return abc;
+        }
+
+        public void setAbc(String abc) {
+            this.abc = abc;
+        }
+
+        public String getDD(){
+            return "dd";
+        }
     }
 }

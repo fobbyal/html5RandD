@@ -1,5 +1,8 @@
 package com.integ.devtools;
 
+import com.google.gson.Gson;
+
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,6 +12,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,31 +21,50 @@ import java.io.PrintWriter;
  * Time: 5:48 PM
  */
 @WebServlet(name = "IntegAppsServlet",
-        urlPatterns = {"/integapps.json"})
+        urlPatterns = {"/integapptools.json"})
 public class IntegAppsServlet extends HttpServlet {
+
+
+    HashMap<String, JSonRequestHandler> handlerMapping;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        handlerMapping = new HashMap<>();
+        handlerMapping.put("load_all", new LoadAll());
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processHtml(request, response);
+        processJSONRequst(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processHtml(request, response);
+        processJSONRequst(request, response);
     }
 
-    public void processHtml(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        OutputStream stream = response.getOutputStream();
-        response.setContentType("text/html");
+    public void processJSONRequst(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.print("got to request");
+        Gson gson = new Gson();
 
-        try {
+        response.setContentType("application/json");
+
+        try (OutputStream stream = response.getOutputStream()) {
+            String action = request.getParameter("action");
+            System.out.println("Got action " + action);
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(stream));
 
-            writer.println("<html><body>Hello Word!!! here Moved to GITHUB</body></html>");
+            if (handlerMapping.containsKey(action)) {
+                String x = handlerMapping.get(action).doRequest(request);
+                System.out.println(x);
+                writer.println(x);
+            } else {
+                writer.println(gson.toJson(new JSONResponse("Could not find mapping for " + action)));
+            }
+
+
             writer.flush();
 
-            System.out.print("dd");
 
-
-        } finally {
-            stream.close();
         }
     }
 
