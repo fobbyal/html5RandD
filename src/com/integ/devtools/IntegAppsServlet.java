@@ -1,7 +1,5 @@
 package com.integ.devtools;
 
-import com.google.gson.Gson;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,9 +9,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.stream.IntStream;
 
 /**
  * Created with IntelliJ IDEA.
@@ -41,6 +36,8 @@ public class IntegAppsServlet extends HttpServlet {
 
             writer.println("<html><body>Hello Word!!! here Moved to GITHUB</body></html>");
             writer.flush();
+
+            System.out.print("dd");
 
 
         } finally {
