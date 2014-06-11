@@ -32,6 +32,7 @@ public class IntegAppsServlet extends HttpServlet {
         super.init(config);
         handlerMapping = new HashMap<>();
         handlerMapping.put("load_all", new LoadAll());
+        handlerMapping.put("search", new Search());
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -55,7 +56,6 @@ public class IntegAppsServlet extends HttpServlet {
 
             if (handlerMapping.containsKey(action)) {
                 String x = handlerMapping.get(action).doRequest(request);
-                System.out.println(x);
                 writer.println(x);
             } else {
                 writer.println(gson.toJson(new JSONResponse("Could not find mapping for " + action)));
