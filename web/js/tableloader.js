@@ -9,14 +9,13 @@ var tableLoader = (function () {
         var rowData;
         var tag;
 
-        if (isThead) {
-            rowData = "<tr>"
-            tag='th';
-        } else {
-            rowData = "<thead><tr>"
-            tag='td';
-        }
 
+        rowData = '<tr>';
+        if (isThead) {
+            tag = 'th'
+        } else {
+            tag = 'td'
+        }
 
         if (fields && fields.length > 0) {
             $.each(fields, function (index, field) {
@@ -28,27 +27,29 @@ var tableLoader = (function () {
                         finalData = data ? data[field + ''] : field;
                     }
 
-                    rowData += '<'+tag+'>' + finalData + '</'+tag+'>';
+                    rowData += '<' + tag + '>' + finalData + '</' + tag + '>';
 
                 }
             );
 
         }
-
         if (isThead) {
-            rowData = "</tr>"
+            rowData = rowData + '</tr></thead>';
+
         } else {
-            rowData = "</tr></thead>"
+            rowData = rowData + '</tr>';
         }
 
+
         return rowData;
+        //return '<tr><td>one</td><td>two</td><td>three</td></tr>';
 
     }
 
 
     function initializeHeaders() {
         vHeaders = (vHeaders == null || vHeaders.length < 1) ? vFields : vHeaders;
-        var headers = createRowData(vHeaders,true);
+        var headers = createRowData(vHeaders, true);
         if (vTable.children('thead').length < 1)
             vTable.prepend('<thead></thead>');
         vTable.children('thead').html(headers);
@@ -81,6 +82,8 @@ var tableLoader = (function () {
         },
 
         loadTableData: function (data, append) {
+
+
             if (vTable.length < 1) return;
 
 
