@@ -5,15 +5,17 @@ var tableLoader = (function () {
     var vTableID, vTable, vFields, vHeaders, vDefaultText, vDataExtractor;
 
 
-    function createRowData(fields, data,isThead) {
+    function createRowData(fields, data, isThead) {
         var rowData;
+        var tag;
 
-        if(isThead){
+        if (isThead) {
             rowData = "<tr>"
-        }else{
-            rowData = "<tr>"
+            tag='th';
+        } else {
+            rowData = "<thead><tr>"
+            tag='td';
         }
-
 
 
         if (fields && fields.length > 0) {
@@ -26,23 +28,27 @@ var tableLoader = (function () {
                         finalData = data ? data[field + ''] : field;
                     }
 
-                    rowData += '<td>' + finalData + '</td>';
+                    rowData += '<'+tag+'>' + finalData + '</'+tag+'>';
 
                 }
             );
-            rowData += "</tr>";
-
-            return rowData;
-
 
         }
+
+        if (isThead) {
+            rowData = "</tr>"
+        } else {
+            rowData = "</tr></thead>"
+        }
+
+        return rowData;
 
     }
 
 
     function initializeHeaders() {
         vHeaders = (vHeaders == null || vHeaders.length < 1) ? vFields : vHeaders;
-        var headers = createRowData(vHeaders);
+        var headers = createRowData(vHeaders,true);
         if (vTable.children('thead').length < 1)
             vTable.prepend('<thead></thead>');
         vTable.children('thead').html(headers);

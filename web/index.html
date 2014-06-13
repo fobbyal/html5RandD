@@ -164,7 +164,7 @@
             </div>-->
 
             <div id="mainContent" class="table-responsive">
-                <table id="app_table" class="table table-responsive"></table>
+                <table id="app_table" class="table table-striped"></table>
             </div>
         </div>
     </div>
@@ -274,16 +274,24 @@
 
     }
 
+    function appSearch(searchType, searchString) {
+
+        loadData(searchString,searchType, loadSearchResult);
+        return false;
+    }
+
 
     function loadSideBar() {
+
+
+
         $.each(appData.clients, function (index, value) {
-            var sideEntry = '<li><a href="#">' + value + '</a></li>';
+            var sideEntry = '<li><a onclick="appSearch(\'client\',\'' + value + '\')">' + value + '</a></li>';
             $('#client-nav').append(sideEntry);
         });
 
-
         $.each(appData.products, function (index, value) {
-            var sideEntry = '<li><a href="#">' + value + '</a></li>';
+            var sideEntry = '<li><a onclick="appSearch(\'product\',\'' + value + '\')">' + value + '</a></li>';
             $('#product-nav').append(sideEntry);
         });
     }
