@@ -69,7 +69,7 @@
             </ul>
 
             <form class="navbar-form" onsubmit="processSearchBox()">
-                <div id="scrollable-dropdown-menu" class="form-group navbar-left" style="display:inline;">
+                <div id="scrollable-dropdown-menu" class="form-group" style="display:inline;">
                     <input id="projects" type="text" class="form-control" placeholder="Search for projects here">
                     <input type="submit" style="visibility: hidden; position: fixed;"/>
                 </div>
@@ -164,6 +164,7 @@
             </div>-->
 
             <div id="mainContent" class="table-responsive">
+                <table id="app_table" class="table table-responsive"></table>
             </div>
         </div>
     </div>
@@ -176,13 +177,14 @@
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="bootstrap/assets/js/docs.min.js"></script>
 <script src="http://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
+<script src="js/tableloader.js"></script>
 
 <script>
 
 
     var substringMatcher = function (strs) {
         return function findMatches(q, cb) {
-            var matches, substringRegex;
+            var matches, substrRegex;
 
             // an array that will be populated with substring matches
             matches = [];
@@ -207,7 +209,6 @@
     function getProjects() {
 
         /*** add json call here to servlet***/
-
         return appData.tags;
     }
 
@@ -217,36 +218,16 @@
      * @type {*|jQuery|HTMLElement}
      */
 
-
-    var appTable = $('<table id="AppContent" class="table table-striped">' +
-            '<thead><tr>' +
-            '<th>Application</th>' +
-            '<th>Team City</th>' +
-            '<th>You Track</th>' +
-            '<th>DataBase</th>' +
-            '</tr></thead><tbody>');
-    var appTableTbody = appTable.find('tbody');
-
     var appData;
 
 
-    function addTableEntry(entry) {
-        var newRow = '<tr>';
+    function loadSearchResult(data) {
 
-        var tmpString = entry.client + '-' + entry.productName + '-' + entry.milestone + '-' + entry.environmentType;
-        tmpString = '<a href="' + entry.appURL + '">' + tmpString + '</a>';
-        newRow += '<td>' + tmpString + '</td>';
-        tmpString = '<a href="' + entry.teamCityURL + '">Build Page</a>';
-        newRow += '<td>' + tmpString + '</td>';
-        tmpString = '<a href="' + entry.uTrackURL + '">Issuer Tracker</a>';
-        newRow += '<td>' + tmpString + '</td>';
-        newRow += '<td>' + entry.dbConnectionString + '</td>';
+        tableLoader.loadTableData(data);
+    }
 
-        newRow += '</tr>';
-
-
-        appTableTbody.append(newRow);
-
+    function processSearchBox() {
+        loadData($('#projects').val(), null, loadSearchResult);
     }
 
     function initializeTypeAhead() {
@@ -264,13 +245,13 @@
                 });
     }
 
-    function loadData(searchString, searchType, firsttime) {
+    function loadData(searchString, searchType, callback) {
 
         var parameters = {};
 
         if (searchString) {
             parameters.action = "search";
-            parameters.searchType = searchString;
+            parameters.searchType = searchType;
             parameters.searchString = searchString;
         } else {
             parameters.action = "load_all";
@@ -281,49 +262,89 @@
             url: 'integapptools.json',
             success: function (data, textStatus, jqXHR) {
 
-                //var response = jQuery.parseJSON('{ "name": "John" }');
-
                 if (!data.error) {
-                    appData = data.response;
-
-                    $.each(appData.allData, function (index, value) {
-                        addTableEntry(value);
-                    });
-                    appTable.appendTo('#mainContent');
-
-                    if (firsttime) {
-                        initializeTypeAhead();
-                        loadSideBar();
-                    }
+                    callback(data.response);
 
                 } else {
                     alert(data.message);
                 }
 
+
             }});
 
     }
+
 
     function loadSideBar() {
         $.each(appData.clients, function (index, value) {
             var sideEntry = '<li><a href="#">' + value + '</a></li>';
             $('#client-nav').append(sideEntry);
         });
+
+
         $.each(appData.products, function (index, value) {
             var sideEntry = '<li><a href="#">' + value + '</a></li>';
             $('#product-nav').append(sideEntry);
         });
     }
 
+    var appTableLoader;
 
-    function initilizePage() {
-        loadData(null, null, true);
 
+    function extractRowData(field, entry) {
+
+        var tmpString;
+
+        switch (field) {
+
+            case 'app':
+                tmpString = entry.client + '-' + entry.productName + '-' + entry.milestone + '-' + entry.environmentType;
+                tmpString = '<a href="' + entry.appURL + '">' + tmpString + '</a>';
+                break;
+            case 'teamcity':
+                tmpString = '<a href="' + entry.teamCityURL + '">Build Page</a>';
+                break;
+            case 'youtrack':
+                tmpString = '<a href="' + entry.uTrackURL + '">Issuer Tracker</a>';
+                break;
+            case 'db':
+                tmpString = entry.dbConnectionString;
+                break;
+            default :
+                tmpString = field;
+        }
+
+        return tmpString;
+    }
+
+
+    function initializeTable(tableData) {
+        appTableLoader =
+                tableLoader.initialize(
+                        'app_table',
+                        ['app', 'teamcity', 'youtrack', 'db'],
+                        ['Application', 'Team City', 'You Track', 'DB String'],
+                        extractRowData, 'There are no application data');
+        appTableLoader.loadTableData(tableData);
+    }
+
+
+    function initFirstLoad(data) {
+        appData = data;
+        initializeTable(data.allData);
+
+
+        initializeTypeAhead();
+        loadSideBar();
 
     }
 
-    initilizePage();
 
+    function initializePage() {
+        loadData(null, null, initFirstLoad);
+    }
+
+    initializePage();
 
 
 </script>
