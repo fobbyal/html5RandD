@@ -91,11 +91,11 @@ public class AppInfoDAO {
 
     public ArrayList<IntegAppInfo> search(String searchString, String searchType) throws RuntimeException {
         String client = "select * from APP_INFO WHERE CLIENT='" + searchString + "'";
-        String product = "select * from APP_INFO WHERE CLIENT='" + searchString + "'";
+        String product = "select * from APP_INFO WHERE PRODUCT_NAME='" + searchString + "'";
         String sql;
         if (searchType != null && searchType.equalsIgnoreCase("CLIENT")) {
             sql = client;
-        } else if (searchType != null && searchType.equalsIgnoreCase("CLIENT")) {
+        } else if (searchType != null && searchType.equalsIgnoreCase("product")) {
             sql = product;
         } else {
             sql = client + " union " + product;
