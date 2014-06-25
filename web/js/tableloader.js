@@ -34,7 +34,7 @@ var tableLoader = (function () {
 
         }
         if (isThead) {
-            rowData = rowData + '</tr></thead>';
+            rowData = rowData + '</tr>';
 
         } else {
             rowData = rowData + '</tr>';

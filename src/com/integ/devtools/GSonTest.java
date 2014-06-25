@@ -18,9 +18,17 @@ public class GSonTest {
 
         IntStream.rangeClosed(1, 4).boxed().forEach(v ->{ list.add("Number "+v);});
 
-        Test tt = new Test("abc");
+        Test tt = new Test("Value");
 
         System.out.println(gson.toJson(tt));
+
+        String jsonString = gson.toJson(tt);
+
+        Test t2=gson.fromJson(jsonString,Test.class);
+
+        System.out.print(t2.getAbc());
+
+
 
     }
 
